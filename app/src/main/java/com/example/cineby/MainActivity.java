@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity {
                 return !Objects.requireNonNull(Uri.parse(url).getHost()).endsWith("cineby.app");
             }
         });
+
         // Set focus to the WebView to handle D-pad navigation
         myWebView.requestFocus();
 
@@ -54,11 +55,25 @@ public class MainActivity extends FragmentActivity {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_DPAD_UP:
                     case KeyEvent.KEYCODE_DPAD_DOWN:
-                    case KeyEvent.KEYCODE_DPAD_LEFT:
-                    case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    case KeyEvent.KEYCODE_DPAD_CENTER:
-                        // Allow WebView to handle the D-pad event
+                        // Allow WebView to handle vertical navigation
                         return false;
+                    case KeyEvent.KEYCODE_DPAD_LEFT:
+                        // Simulate swipe left for swiper-slide navigation
+                        myWebView.evaluateJavascript(
+                                "document.querySelector('.swiper-button-next').click();",
+                                null
+                        );
+                        return true; // Indicate we handled this key event
+                    case KeyEvent.KEYCODE_DPAD_RIGHT:
+                        // Simulate swipe right for swiper-slide navigation
+                        myWebView.evaluateJavascript(
+                                "document.querySelector('.swiper-button-prev').click();",
+                                null
+                        );
+                        return true; // Indicate we handled this key event
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                        // Handle the Enter key (select button)
+                        return false; // Let WebView handle the click as normal
                     default:
                         break;
                 }
